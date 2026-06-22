@@ -11,15 +11,19 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'npm'
       - name: npm install and build webpack
-        run: 
+        run: |
           npm install
           npm run build
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v4
         with:
           name: webpack artifacts
           path: public/
@@ -30,12 +34,11 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x, 20.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         os: [ubuntu-latest, windows-2016]
 
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/download-artifact@master
+    - uses: actions/download-artifact@v4
       with:
         name: webpack artifacts
         path: public
